@@ -1,5 +1,5 @@
-import type { Range, StartRange } from "./types";
-import { defaultRangeStrategy } from "./rangeStrategy";
+import type { Range } from "./types";
+import { defaultSegmentStrategy } from "./segmentStrategy";
 import { getMapMin } from "./utils";
 
 export type RangeIndex = number;
@@ -9,21 +9,21 @@ export class RangeProvider {
   private readonly ranges: Readonly<Range[]>;
   private readonly downloaderCounter: Map<RangeIndex, number> = new Map();
   private readonly controllers: Map<RangeIndex, AbortController> = new Map();
-  private readonly strategy = defaultRangeStrategy;
+  private readonly segmentStrategy = defaultSegmentStrategy;
 
   private readonly doneController = new AbortController();
 
   constructor(
     contentLength: number,
-    strategy?: (contentLength: number) => Range[]
+    segmentStrategy?: (contentLength: number) => Range[]
   ) {
     this.contentLength = contentLength;
-    if (strategy) {
-      this.strategy = strategy;
+    if (segmentStrategy) {
+      this.segmentStrategy = segmentStrategy;
     }
 
     // Create the ranges
-    this.ranges = this.strategy(contentLength);
+    this.ranges = this.segmentStrategy(contentLength);
     // init downloader counter
     for (let i = 0; i < this.ranges.length; i++) {
       this.downloaderCounter.set(i, 0);

@@ -22,7 +22,7 @@ function getRange(start: number, length: number, contentLength: number): Range {
   return [start, end];
 }
 
-export function defaultRangeStrategy(contentLength: number): Range[] {
+export function defaultSegmentStrategy(contentLength: number): Range[] {
   const segmentSize = defaultSegmentSize(contentLength);
   const startRanges: Range[] = [];
   for (

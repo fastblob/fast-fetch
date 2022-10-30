@@ -1,1 +1,1 @@
-export default fetch
+export { parallelFetch as default } from './parallel-fetch';

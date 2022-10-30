@@ -1,7 +1,8 @@
 import { DownloadWorker } from "../worker/DownloadWorker";
-import { RangeProvider, type RangeIndex } from "../range";
+import { RangeProvider } from "../range";
 import type { ParallelGetConfig, FetchInput } from "../types";
 import type { Metadata } from "../metadata";
+import { getContentLength } from "../metadata";
 import { DownloadStreamer } from "./DownloadStreamer";
 
 export class DownloadManger {
@@ -16,11 +17,7 @@ export class DownloadManger {
     this.urls = urls;
     this.workers = urls.map((url) => new DownloadWorker(url, init));
 
-    const contentLengthStr = metadata.headers.get("Content-Length");
-    if (!contentLengthStr) {
-      throw new Error("Content-Length header is missing");
-    }
-    const contentLength = parseInt(contentLengthStr);
+    const contentLength = getContentLength(metadata.headers);
     this.rangeProvider = new RangeProvider(contentLength);
 
     this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex);

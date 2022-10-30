@@ -2,15 +2,15 @@ import type { Range } from "../range/types";
 import type { FetchInput, ParallelGetConfig } from "../request";
 
 export class DownloadWorker {
-  readonly url: FetchInput;
+  readonly input: FetchInput;
   readonly init: ParallelGetConfig;
   readonly maxRetries: number = 5;
   readonly retryDelay: number = 3000;
   private errorPromise = Promise.resolve();
   private currentRetry = 0;
 
-  constructor(url: FetchInput, init: ParallelGetConfig) {
-    this.url = url;
+  constructor(input: FetchInput, init: ParallelGetConfig) {
+    this.input = input;
     this.init = init;
     if (init?.parallelFetch?.maxRetries) {
       this.maxRetries = init.parallelFetch.maxRetries;
@@ -29,7 +29,7 @@ export class DownloadWorker {
       controller.abort();
     });
 
-    const response = await fetch(this.url, {
+    const response = await fetch(this.input, {
       ...this.init,
       headers: {
         ...this.init?.headers,
@@ -40,7 +40,7 @@ export class DownloadWorker {
     if (!response.ok) {
       controller.abort();
       this.error();
-      throw new Error(`Failed to download ${this.url} at range ${range}`);
+      throw new Error(`Failed to download ${this.input} at range ${range}`);
     }
 
     const blob = await response.blob();
@@ -48,7 +48,7 @@ export class DownloadWorker {
     if (blob.size !== end - start + 1) {
       this.error();
       throw new Error(
-        `Failed to download ${this.url} at range ${range}, size mismatch`
+        `Failed to download ${this.input} at range ${range}, size mismatch`
       );
     }
 

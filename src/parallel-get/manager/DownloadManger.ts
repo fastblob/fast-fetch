@@ -58,18 +58,18 @@ export class DownloadManger {
       }
 
       if (!worker.working) {
-        this.logger?.warning?.(`Worker ${worker.url} is not working.`);
+        this.logger?.warning?.(`Worker ${worker.input} is not working.`);
         throw new Error("Worker is not working");
       }
 
       const { range, rangeIndex, signal } = this.rangeProvider.getRange();
       try {
         this.logger?.debug?.(
-          `Worker ${worker.url} is fetching range ${rangeIndex}.`
+          `Worker ${worker.input} is fetching range ${rangeIndex}.`
         );
         const blob = await worker.download(range, signal);
         this.logger?.debug?.(
-          `Worker ${worker.url} fetched range ${rangeIndex} successfully.`
+          `Worker ${worker.input} fetched range ${rangeIndex} successfully.`
         );
 
         // notify range provider that this range is done
@@ -80,7 +80,7 @@ export class DownloadManger {
         if ((e as DOMException)?.name !== "AbortError") {
           // worker failed other than AbortError
           this.logger?.error?.(
-            `Worker ${worker.url} failed to fetch range ${rangeIndex}: ${e}.`
+            `Worker ${worker.input} failed to fetch range ${rangeIndex}: ${e}.`
           );
         }
 

@@ -1,6 +1,5 @@
-import { ParallelGetConfig } from "../types";
 import type { Range } from "../range/types";
-import type { FetchInput } from "../types";
+import type { FetchInput, ParallelGetConfig } from "../request";
 
 export class DownloadWorker {
   readonly url: FetchInput;

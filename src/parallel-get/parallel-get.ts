@@ -1,15 +1,9 @@
-import type { ParallelGetConfig } from "./types";
+import type { ParallelGetConfig, FetchInput } from "./request";
 import { getMetadata } from "./metadata";
 import { DownloadManger } from "./manager";
 import { RequestConfig } from "./request";
 
-type FetchParams = Parameters<typeof fetch>;
-type FetchReturn = ReturnType<typeof fetch>;
-
-export async function parallelGet(
-  input: FetchParams[0],
-  init?: ParallelGetConfig
-): FetchReturn {
+export async function parallelGet(input: FetchInput, init?: ParallelGetConfig) {
   try {
     const requestConfig = new RequestConfig(input, init);
 

@@ -1,4 +1,4 @@
-import type { FetchInput, ParallelGetConfig } from "../types"
+import type { FetchInput, ParallelGetConfig } from "./types"
 
 export class RequestConfig {
     readonly input: FetchInput

@@ -4,7 +4,7 @@
   "description": "JavaScript fetch in parallel and segmented way",
   "main": "index.js",
   "scripts": {
-    "build": "swc ./src -d lib",
+    "build": "swc ./src -d lib --config-file .swcrc",
     "build:types": "tsc --emitDeclarationOnly",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"

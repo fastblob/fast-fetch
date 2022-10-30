@@ -1,15 +1,16 @@
 import { ParallelGetConfig } from "../types";
 import type { Range } from "../range/types";
+import type { FetchInput } from "../types";
 
 export class DownloadWorker {
-  readonly url: string;
+  readonly url: FetchInput;
   readonly init: ParallelGetConfig;
   readonly maxRetries: number = 5;
   readonly retryDelay: number = 3000;
   private errorPromise = Promise.resolve();
   private currentRetry = 0;
 
-  constructor(url: string, init: ParallelGetConfig) {
+  constructor(url: FetchInput, init: ParallelGetConfig) {
     this.url = url;
     this.init = init;
     if (init?.parallelFetch?.maxRetries) {

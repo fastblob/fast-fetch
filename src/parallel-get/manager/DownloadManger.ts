@@ -1,15 +1,15 @@
 import { DownloadWorker } from "../worker/DownloadWorker";
 import { RangeProvider, type RangeIndex } from "../range/rangeProvider";
-import { ParallelGetConfig } from "../types";
+import type { ParallelGetConfig, FetchInput } from "../types";
 
 export class DownloadManger {
   readonly headers: Headers;
-  readonly urls: string[];
+  readonly urls: FetchInput[];
   readonly workers: DownloadWorker[];
   readonly rangeProvider: RangeProvider;
   readonly blobs: Map<RangeIndex, Blob> = new Map();
 
-  constructor(init: ParallelGetConfig, headers: Headers, urls: string[]) {
+  constructor(init: ParallelGetConfig, headers: Headers, urls: FetchInput[]) {
     this.headers = headers;
     this.urls = urls;
     this.workers = urls.map((url) => new DownloadWorker(url, init));

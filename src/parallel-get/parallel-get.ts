@@ -12,6 +12,11 @@ export async function parallelGet(
   try {
     const inputs = [input, ...(init?.parallelFetch?.mirrorURLs || [])];
     const metadata = await getMetadata(inputs, init);
+
+    if (metadata.status !== 200) {
+      throw new Error(`Status code is not 200: ${metadata.status}`);
+    }
+
     const manager = new DownloadManger(init, metadata, inputs);
     return await manager.fetch();
   } catch {

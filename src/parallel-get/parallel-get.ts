@@ -1,11 +1,16 @@
 import type { ParallelGetConfig } from "./types";
+import { getHeaders } from "./headers";
+import {DownloadManger} from "./manager";
 
 type FetchParams = Parameters<typeof fetch>;
 type FetchReturn = ReturnType<typeof fetch>;
 
-export function parallelGet(
+export async function parallelGet(
   input: FetchParams[0],
   init?: ParallelGetConfig
 ): FetchReturn {
-  return fetch(input, init);
+  const headers = await getHeaders(input, init);
+  const urls = [input, ...(init?.parallelFetch?.mirrorURLs || [])] as string[];
+  const manager = new DownloadManger(init, headers, urls);
+  return await manager.fetch();
 }

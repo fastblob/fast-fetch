@@ -1,1 +1,1 @@
-export const parallelGet = fetch;
+export { parallelGet } from "./parallel-get";

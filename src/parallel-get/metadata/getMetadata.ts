@@ -1,4 +1,4 @@
-import type { ParallelGetConfig } from "../types";
+import type { ParallelGetConfig, FetchInput } from "../types";
 
 type FetchParams = Parameters<typeof fetch>;
 
@@ -9,15 +9,14 @@ export type Metadata = {
 };
 
 export async function getMetadata(
-  input: FetchParams[0],
-  init?: FetchParams[1] & ParallelGetConfig
+  inputs: FetchInput[],
+  init?: ParallelGetConfig
 ): Promise<Metadata> {
-  const urls = [input, ...(init?.parallelFetch?.mirrorURLs || [])];
   const controller = new AbortController();
   const signal = controller.signal;
 
-  const promises = urls.map((url) =>
-    fetch(url, {
+  const promises = inputs.map((input) =>
+    fetch(input, {
       ...init,
       method: "HEAD",
       signal,

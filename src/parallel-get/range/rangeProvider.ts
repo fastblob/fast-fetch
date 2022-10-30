@@ -72,4 +72,8 @@ export class RangeProvider {
   get doneSignal(): AbortSignal {
     return this.doneController.signal;
   }
+
+  get maxRangeIndex(): RangeIndex {
+    return this.ranges.length - 1;
+  }
 }

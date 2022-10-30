@@ -2,13 +2,14 @@ import { DownloadWorker } from "../worker/DownloadWorker";
 import { RangeProvider, type RangeIndex } from "../range/rangeProvider";
 import type { ParallelGetConfig, FetchInput } from "../types";
 import type { Metadata } from "../metadata";
+import { DownloadStreamer } from "./DownloadStreamer";
 
 export class DownloadManger {
   readonly metadata: Metadata;
   readonly urls: FetchInput[];
   readonly workers: DownloadWorker[];
   readonly rangeProvider: RangeProvider;
-  readonly blobs: Map<RangeIndex, Blob> = new Map();
+  readonly streamer: DownloadStreamer;
 
   constructor(init: ParallelGetConfig, metadata: Metadata, urls: FetchInput[]) {
     this.metadata = metadata;
@@ -21,22 +22,16 @@ export class DownloadManger {
     }
     const contentLength = parseInt(contentLengthStr);
     this.rangeProvider = new RangeProvider(contentLength);
+
+    this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex);
   }
 
   async fetch(): Promise<Response> {
-    const promises = this.workers.map((worker) =>
+    this.workers.map((worker) =>
       this.asyncWorkToWorker(worker)
     );
-    await Promise.all(promises);
 
-    const blob = this.combineBlobs();
-    return new Response(blob, this.metadata);
-  }
-
-  combineBlobs(): Blob {
-    const blobsMap = new Map([...this.blobs].sort());
-    const blobs = [...blobsMap.values()];
-    return new Blob(blobs);
+    return new Response(this.streamer.ReadableStream, this.metadata);
   }
 
   async asyncWorkToWorker(worker: DownloadWorker) {
@@ -51,7 +46,7 @@ export class DownloadManger {
       try {
         const blob = await worker.download(range, signal);
         this.rangeProvider.downloadComplete(rangeIndex);
-        this.blobs.set(rangeIndex, blob);
+        this.streamer.queueBlob(rangeIndex, blob);
       } catch {
         this.rangeProvider.removeDownloader(rangeIndex);
       }

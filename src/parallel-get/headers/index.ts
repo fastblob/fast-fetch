@@ -1,0 +1,1 @@
+export { getHeaders } from "./getHeaders";

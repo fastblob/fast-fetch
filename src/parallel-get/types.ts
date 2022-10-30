@@ -1,4 +1,4 @@
-export type ParallelGetConfig = {
+export type ParallelGetSubConfig = {
   parallelFetch?: {
     mirrorURLs?: string[];
     maxRetries?: number;
@@ -16,3 +16,6 @@ export type ParallelGetConfig = {
     }) => void;
   };
 };
+
+type FetchParams = Parameters<typeof fetch>;
+export type ParallelGetConfig = FetchParams[1] & ParallelGetSubConfig | undefined;

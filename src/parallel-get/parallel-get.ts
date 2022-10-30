@@ -5,7 +5,7 @@ type FetchReturn = ReturnType<typeof fetch>;
 
 export function parallelGet(
   input: FetchParams[0],
-  init?: FetchParams[1] & ParallelGetConfig
+  init?: ParallelGetConfig
 ): FetchReturn {
   return fetch(input, init);
 }

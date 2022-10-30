@@ -1,21 +1,23 @@
 import { DownloadWorker } from "../worker/DownloadWorker";
 import { RangeProvider } from "../range";
-import type { ParallelGetConfig, FetchInput } from "../types";
 import type { Metadata } from "../metadata";
 import { getContentLength } from "../metadata";
 import { DownloadStreamer } from "./DownloadStreamer";
+import type { RequestConfig } from "../request";
 
 export class DownloadManger {
   readonly metadata: Metadata;
-  readonly urls: FetchInput[];
+  readonly requestConfig: RequestConfig;
   readonly workers: DownloadWorker[];
   readonly rangeProvider: RangeProvider;
   readonly streamer: DownloadStreamer;
 
-  constructor(init: ParallelGetConfig, metadata: Metadata, urls: FetchInput[]) {
+  constructor(requestConfig: RequestConfig, metadata: Metadata) {
+    this.requestConfig = requestConfig;
     this.metadata = metadata;
-    this.urls = urls;
-    this.workers = urls.map((url) => new DownloadWorker(url, init));
+    this.workers = requestConfig.inputs.map(
+      (input) => new DownloadWorker(input, requestConfig.init)
+    );
 
     const contentLength = getContentLength(metadata.headers);
     this.rangeProvider = new RangeProvider(contentLength);

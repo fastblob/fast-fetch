@@ -2,7 +2,7 @@ import type { Range, StartRange } from "./types";
 import { defaultRangeStrategy } from "./rangeStrategy";
 import { getMapMin } from "./utils";
 
-type RangeIndex = number;
+export type RangeIndex = number;
 
 export class RangeProvider {
   readonly contentLength: number;
@@ -31,7 +31,9 @@ export class RangeProvider {
   }
 
   removeDownloader(rangeIndex: RangeIndex) {
-    this.downloaderCounter.set(rangeIndex, this.downloaderCounter.get(rangeIndex)! - 1);
+    if (this.downloaderCounter.has(rangeIndex)) {
+        this.downloaderCounter.set(rangeIndex, this.downloaderCounter.get(rangeIndex)! - 1);
+    }
   }
 
   downloadComplete(rangeIndex: RangeIndex) {

@@ -1,4 +1,4 @@
-import { type RangeIndex } from "../range/rangeProvider";
+import { type RangeIndex } from "../range";
 
 export class DownloadStreamer {
   private readonly maxRangeIndex: number;

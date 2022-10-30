@@ -1,8 +1,6 @@
-import type { Range } from "./types";
+import type { Range, RangeIndex } from "./types";
 import { defaultSegmentStrategy } from "./segmentStrategy";
-import { getMapMin } from "./utils";
-
-export type RangeIndex = number;
+import { defaultSelectRangeStrategy } from "./selectRangeStrategy";
 
 export class RangeProvider {
   readonly contentLength: number;
@@ -10,16 +8,23 @@ export class RangeProvider {
   private readonly downloaderCounter: Map<RangeIndex, number> = new Map();
   private readonly controllers: Map<RangeIndex, AbortController> = new Map();
   private readonly segmentStrategy = defaultSegmentStrategy;
+  private readonly selectRangeStrategy = defaultSelectRangeStrategy;
 
   private readonly doneController = new AbortController();
 
   constructor(
     contentLength: number,
-    segmentStrategy?: (contentLength: number) => Range[]
+    segmentStrategy?: (contentLength: number) => Range[],
+    selectRangeStrategy?: (
+      downloaderCounter: Map<RangeIndex, number>
+    ) => RangeIndex
   ) {
     this.contentLength = contentLength;
     if (segmentStrategy) {
       this.segmentStrategy = segmentStrategy;
+    }
+    if (selectRangeStrategy) {
+      this.selectRangeStrategy = selectRangeStrategy;
     }
 
     // Create the ranges
@@ -32,7 +37,10 @@ export class RangeProvider {
 
   removeDownloader(rangeIndex: RangeIndex) {
     if (this.downloaderCounter.has(rangeIndex)) {
-        this.downloaderCounter.set(rangeIndex, this.downloaderCounter.get(rangeIndex)! - 1);
+      this.downloaderCounter.set(
+        rangeIndex,
+        this.downloaderCounter.get(rangeIndex)! - 1
+      );
     }
   }
 
@@ -51,10 +59,13 @@ export class RangeProvider {
     rangeIndex: RangeIndex;
     signal: AbortSignal;
   } {
-    const rangeIndex = getMapMin(this.downloaderCounter);
+    const rangeIndex = this.selectRangeStrategy(this.downloaderCounter);
     const range = this.ranges[rangeIndex];
     const signal = this.getController(rangeIndex).signal;
-    this.downloaderCounter.set(rangeIndex, this.downloaderCounter.get(rangeIndex)! + 1);
+    this.downloaderCounter.set(
+      rangeIndex,
+      this.downloaderCounter.get(rangeIndex)! + 1
+    );
     return { range, rangeIndex, signal };
   }
 

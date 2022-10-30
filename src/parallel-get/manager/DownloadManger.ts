@@ -1,5 +1,5 @@
 import { DownloadWorker } from "../worker/DownloadWorker";
-import { RangeProvider, type RangeIndex } from "../range/rangeProvider";
+import { RangeProvider, type RangeIndex } from "../range";
 import type { ParallelGetConfig, FetchInput } from "../types";
 import type { Metadata } from "../metadata";
 import { DownloadStreamer } from "./DownloadStreamer";

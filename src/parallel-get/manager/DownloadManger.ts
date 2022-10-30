@@ -24,11 +24,20 @@ export class DownloadManger {
   }
 
   async fetch(): Promise<Response> {
-    this.workers.map((worker) =>
+    this.startFetching();
+    return new Response(this.streamer.ReadableStream, this.metadata);
+  }
+
+  async startFetching() {
+    const promises = this.workers.map((worker) =>
       this.asyncWorkToWorker(worker)
     );
-
-    return new Response(this.streamer.ReadableStream, this.metadata);
+    try {
+      await Promise.any(promises);
+    } catch {
+      // all workers failed
+      this.streamer.abort("All workers failed");
+    }
   }
 
   async asyncWorkToWorker(worker: DownloadWorker) {
@@ -37,6 +46,10 @@ export class DownloadManger {
     while (true) {
       if (doneSignal.aborted) {
         return;
+      }
+
+      if (!worker.working) {
+        throw new Error("Worker is not working");
       }
 
       const { range, rangeIndex, signal } = this.rangeProvider.getRange();

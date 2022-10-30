@@ -21,6 +21,10 @@ export class DownloadStreamer {
     this.write();
   }
 
+  abort(reason?: any): void {
+    this.stream.writable.getWriter().abort(reason);
+  }
+
   private async write() {
     if (this.writingLock) {
       return;

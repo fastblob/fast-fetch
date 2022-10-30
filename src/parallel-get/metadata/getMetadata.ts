@@ -1,7 +1,5 @@
 import type { ParallelGetConfig, FetchInput } from "../types";
 
-type FetchParams = Parameters<typeof fetch>;
-
 export type Metadata = {
   headers: Headers;
   status: number;
@@ -23,10 +21,11 @@ export async function getMetadata(
     })
   );
 
-  const responses = await Promise.any(promises);
-  const headers = responses.headers;
-  const status = responses.status;
-  const statusText = responses.statusText;
+  const response = await Promise.any(promises);
+
+  const headers = response.headers;
+  const status = response.status;
+  const statusText = response.statusText;
 
   controller.abort();
 

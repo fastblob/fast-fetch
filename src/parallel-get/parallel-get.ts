@@ -4,18 +4,20 @@ import { DownloadManger } from "./manager";
 import { RequestConfig } from "./request";
 
 export async function parallelGet(input: FetchInput, init?: ParallelGetConfig) {
+  const requestConfig = new RequestConfig(input, init);
   try {
-    const requestConfig = new RequestConfig(input, init);
-
     const metadata = await getMetadata(requestConfig);
 
     if (metadata.status !== 200) {
-      throw new Error(`Status code is not 200: ${metadata.status}`);
+      const message = `❌ Status code is not 200: ${metadata.status}`
+      requestConfig.parallelConfig?.logger?.error?.(message)
+      throw new Error(message);
     }
 
     const manager = new DownloadManger(requestConfig, metadata);
     return await manager.fetch();
   } catch {
+    requestConfig.parallelConfig?.logger?.error?.("❌ Fallback to normal fetch")
     // fallback to normal fetch
     return fetch(input, init);
   }

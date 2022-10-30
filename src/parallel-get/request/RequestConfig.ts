@@ -12,4 +12,9 @@ export class RequestConfig {
     get inputs() {
         return [this.input, ...(this.init?.parallelFetch?.mirrorURLs || [])];
     }
+
+    get parallelConfig() {
+        return this.init?.parallelFetch;
+    }
+
 }

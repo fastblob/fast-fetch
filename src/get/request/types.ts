@@ -3,7 +3,7 @@ import type { Logger } from "../logger";
 type FetchParams = Parameters<typeof fetch>;
 export type FetchInput = FetchParams[0];
 
-type FastFetchGetConfig = {
+export type FastFetchGetConfig = {
   mirrorURLs?: FetchInput[];
   maxRetries?: number;
   retryDelay?: number;

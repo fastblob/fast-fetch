@@ -1,10 +1,10 @@
-import type { FetchInput, ParallelGetConfig } from "./types"
+import type { FetchInput, GETInit } from "./types"
 
-export class RequestConfig {
+export class GETRequestConfig {
     readonly input: FetchInput
-    readonly init: ParallelGetConfig
+    readonly init: GETInit
 
-    constructor(input: FetchInput, init?: ParallelGetConfig) {
+    constructor(input: FetchInput, init?: GETInit) {
         this.input = input
         this.init = init
     }

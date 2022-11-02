@@ -1,2 +1,2 @@
-export { RequestConfig } from "./RequestConfig";
-export type { ParallelGetConfig, FetchInput } from "./types";
+export { GETRequestConfig } from "./RequestConfig";
+export type { GETInit, FetchInput } from "./types";

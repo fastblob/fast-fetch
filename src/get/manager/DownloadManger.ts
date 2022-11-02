@@ -3,16 +3,16 @@ import { RangeProvider } from "../range";
 import type { Metadata } from "../metadata";
 import { getContentLength } from "../metadata";
 import { DownloadStreamer } from "./DownloadStreamer";
-import type { RequestConfig } from "../request";
+import type { GETRequestConfig } from "../request";
 
 export class DownloadManger {
   readonly metadata: Metadata;
-  readonly requestConfig: RequestConfig;
+  readonly requestConfig: GETRequestConfig;
   readonly workers: DownloadWorker[];
   readonly rangeProvider: RangeProvider;
   readonly streamer: DownloadStreamer;
 
-  constructor(requestConfig: RequestConfig, metadata: Metadata) {
+  constructor(requestConfig: GETRequestConfig, metadata: Metadata) {
     this.requestConfig = requestConfig;
     this.metadata = metadata;
     this.workers = requestConfig.inputs.map(

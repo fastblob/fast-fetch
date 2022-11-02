@@ -1,10 +1,10 @@
-import type { ParallelGetConfig, FetchInput } from "./request";
+import type { GETInit, FetchInput } from "./request";
 import { getMetadata } from "./metadata";
 import { DownloadManger } from "./manager";
-import { RequestConfig } from "./request";
+import { GETRequestConfig } from "./request";
 
-export async function parallelGet(input: FetchInput, init?: ParallelGetConfig) {
-  const requestConfig = new RequestConfig(input, init);
+export async function parallelGet(input: FetchInput, init?: GETInit) {
+  const requestConfig = new GETRequestConfig(input, init);
   try {
     const metadata = await getMetadata(requestConfig);
 

@@ -1,2 +1,2 @@
 export { fastFetch as default } from "./fast-fetch";
-export type { ParallelGetConfig } from "./get";
+export type { GETInit } from "./get";

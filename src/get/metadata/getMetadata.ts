@@ -1,4 +1,4 @@
-import type { RequestConfig } from "../request";
+import type { GETRequestConfig } from "../request";
 
 export type Metadata = {
   headers: Headers;
@@ -7,7 +7,7 @@ export type Metadata = {
 };
 
 export async function getMetadata(
-  requestConfig: RequestConfig,
+  requestConfig: GETRequestConfig,
 ): Promise<Metadata> {
   const controller = new AbortController();
   const signal = controller.signal;

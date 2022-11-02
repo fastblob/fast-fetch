@@ -4,8 +4,7 @@
   "description": "JavaScript fetch in parallel and segmented way",
   "main": "index.js",
   "scripts": {
-    "build": "swc ./src -d lib --config-file .swcrc",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,8 +19,6 @@
   },
   "homepage": "https://github.com/fastblob/parallel-fetch#readme",
   "devDependencies": {
-    "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.3.11",
     "typescript": "^4.8.4"
   }
 }

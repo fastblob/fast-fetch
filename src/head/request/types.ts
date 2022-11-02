@@ -5,8 +5,8 @@ export interface FastFetchHEADConfig {
   mirrorURLs?: FetchInput[]
 }
 
-interface FastFetchInit {
+interface FastFetchHEADInit {
   fastFetch?: FastFetchHEADConfig
 }
 
-export type HEADInit = (FetchParams[1] & FastFetchInit & { method: 'HEAD' }) | undefined
+export type HEADInit = (FetchParams[1] & FastFetchHEADInit & { method: 'HEAD' })

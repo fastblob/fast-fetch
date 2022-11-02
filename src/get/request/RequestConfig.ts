@@ -6,7 +6,7 @@ export class GETRequestConfig {
   readonly input: FetchInput
   readonly init: GETInit
 
-  constructor (input: FetchInput, init?: GETInit) {
+  constructor (input: FetchInput, init: GETInit) {
     this.input = input
     this.init = init
   }

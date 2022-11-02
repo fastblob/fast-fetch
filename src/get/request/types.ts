@@ -12,8 +12,8 @@ export interface FastFetchGetConfig {
   chunkCallback?: ChunkCallback
 }
 
-interface FastFetchInit {
+interface FastFetchGETInit {
   fastFetch?: FastFetchGetConfig
 }
 
-export type GETInit = (FetchParams[1] & FastFetchInit & { method: 'GET' | undefined }) | undefined
+export type GETInit = (FetchParams[1] & FastFetchGETInit & { method: 'GET' | undefined }) | undefined

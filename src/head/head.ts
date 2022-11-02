@@ -2,7 +2,7 @@ import type { HEADInit, FetchInput } from './request'
 import { HEADRequestConfig } from './request'
 import { HEAD as SubHEAD } from './header'
 
-export async function HEAD (input: FetchInput, init?: HEADInit): Promise<Response> {
+export async function HEAD (input: FetchInput, init: HEADInit): Promise<Response> {
   const requestConfig = new HEADRequestConfig(input, init)
 
   // no mirror URLs, fallback to normal fetch

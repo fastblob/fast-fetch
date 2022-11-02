@@ -4,7 +4,7 @@ export class HEADRequestConfig {
   readonly input: FetchInput
   readonly init: HEADInit
 
-  constructor (input: FetchInput, init?: HEADInit) {
+  constructor (input: FetchInput, init: HEADInit) {
     this.input = input
     this.init = init
   }

@@ -1,5 +1,5 @@
 {
-  "name": "fast-fetch",
+  "name": "@fastblob/fast-fetch",
   "version": "1.0.0",
   "description": "JavaScript fetch in parallel and segmented way",
   "main": "lib/index.js",

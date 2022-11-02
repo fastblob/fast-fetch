@@ -12,7 +12,7 @@
 ## Usage
 
 ```js
-import fetch from 'fast-fetch';
+import fetch from '@fastblob/fast-fetch';
 const response = await fetch('https://example.com/test.bin', {
   fastFetch: {
     mirrorURLs: ['https://anotherexample.com/test.bin']

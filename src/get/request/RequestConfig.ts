@@ -13,7 +13,7 @@ export class GETRequestConfig {
         return [this.input, ...(this.init?.fastFetch?.mirrorURLs || [])];
     }
 
-    get parallelConfig() {
+    get fastFetchConfig() {
         return this.init?.fastFetch;
     }
 

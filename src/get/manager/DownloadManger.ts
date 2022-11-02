@@ -18,11 +18,11 @@ export class DownloadManger {
     this.workers = requestConfig.inputs.map(
       (input) => new DownloadWorker(input, requestConfig.init)
     );
-    requestConfig.parallelConfig?.logger?.info?.(`Workers Count: ${this.workers.length}`);
+    requestConfig.fastFetchConfig?.logger?.info?.(`Workers Count: ${this.workers.length}`);
 
     const contentLength = getContentLength(metadata.headers);
     this.rangeProvider = new RangeProvider(contentLength);
-    requestConfig.parallelConfig?.logger?.info?.(`Content length: ${contentLength}`);
+    requestConfig.fastFetchConfig?.logger?.info?.(`Content length: ${contentLength}`);
 
     this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex);
   }
@@ -90,6 +90,6 @@ export class DownloadManger {
   }
 
   private get logger() {
-    return this.requestConfig.parallelConfig?.logger;
+    return this.requestConfig.fastFetchConfig?.logger;
   }
 }

@@ -6,11 +6,12 @@ import { DownloadStreamer } from './DownloadStreamer'
 import type { GETRequestConfig } from '../request'
 
 export class DownloadManger {
-  readonly metadata: Metadata
-  readonly requestConfig: GETRequestConfig
-  readonly workers: DownloadWorker[]
-  readonly rangeProvider: RangeProvider
-  readonly streamer: DownloadStreamer
+  private readonly metadata: Metadata
+  private readonly requestConfig: GETRequestConfig
+  private readonly workers: DownloadWorker[]
+  private readonly rangeProvider: RangeProvider
+  private readonly streamer: DownloadStreamer
+  readonly response: Response
 
   constructor (requestConfig: GETRequestConfig, metadata: Metadata) {
     this.requestConfig = requestConfig
@@ -25,15 +26,13 @@ export class DownloadManger {
     requestConfig.logger.info(`Content length: ${contentLength}`)
 
     this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex, requestConfig?.init?.signal)
-  }
 
-  async fetch (): Promise<Response> {
     void this.startFetching()
-    return new Response(this.streamer.ReadableStream, this.metadata)
+    this.response = new Response(this.streamer.ReadableStream, this.metadata)
   }
 
   // start fetching
-  async startFetching (): Promise<void> {
+  private async startFetching (): Promise<void> {
     this.requestConfig.logger.info('Start fetching.')
 
     const promises = this.workers.map(async (worker, idx) =>

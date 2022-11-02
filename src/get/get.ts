@@ -15,7 +15,7 @@ export async function GET (input: FetchInput, init?: GETInit): Promise<Response>
     }
 
     const manager = new DownloadManger(requestConfig, metadata)
-    return await manager.fetch()
+    return manager.response
   } catch {
     requestConfig.logger.error('Fallback to normal fetch')
     // fallback to normal fetch

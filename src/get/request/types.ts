@@ -16,4 +16,4 @@ interface FastFetchInit {
   fastFetch?: FastFetchGetConfig
 }
 
-export type GETInit = (FetchParams[1] & FastFetchInit) | undefined
+export type GETInit = (FetchParams[1] & FastFetchInit & { method: 'GET' | undefined }) | undefined

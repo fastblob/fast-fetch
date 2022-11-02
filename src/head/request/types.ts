@@ -9,4 +9,4 @@ interface FastFetchInit {
   fastFetch?: FastFetchHEADConfig
 }
 
-export type HEADInit = (FetchParams[1] & FastFetchInit) | undefined
+export type HEADInit = (FetchParams[1] & FastFetchInit & { method: 'HEAD' }) | undefined

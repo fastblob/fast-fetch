@@ -9,8 +9,13 @@ export class DownloadStreamer {
 
   private writingLock = false
 
-  constructor (maxRangeIndex: number) {
+  constructor (maxRangeIndex: number, signal?: AbortSignal | null) {
     this.maxRangeIndex = maxRangeIndex
+    if (signal != null) {
+      signal.addEventListener('abort', () => {
+        this.abort()
+      })
+    }
   }
 
   get ReadableStream (): ReadableStream<Uint8Array> {

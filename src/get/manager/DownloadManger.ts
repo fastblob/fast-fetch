@@ -24,7 +24,7 @@ export class DownloadManger {
     this.rangeProvider = new RangeProvider(contentLength)
     requestConfig.logger.info(`Content length: ${contentLength}`)
 
-    this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex)
+    this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex, requestConfig?.init?.signal)
   }
 
   async fetch (): Promise<Response> {

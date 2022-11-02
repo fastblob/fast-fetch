@@ -2,7 +2,10 @@
   "name": "parallel-fetch",
   "version": "1.0.0",
   "description": "JavaScript fetch in parallel and segmented way",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",

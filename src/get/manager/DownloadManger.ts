@@ -34,16 +34,16 @@ export class DownloadManger {
 
   // start fetching
   async startFetching() {
-    this.logger?.info?.(`Start fetching.`);
+    this.requestConfig.logger.info(`Start fetching.`);
 
     const promises = this.workers.map((worker) =>
       this.assignWorkToWorker(worker)
     );
     try {
       await Promise.any(promises);
-      this.logger?.info?.(`Fetching done.`);
+      this.requestConfig.logger.info(`Fetching done.`);
     } catch {
-      this.logger?.error?.(`All workers failed, stream aborted.`);
+      this.requestConfig.logger.error(`All workers failed, stream aborted.`);
       // all workers failed
       this.streamer.abort("All workers failed");
     }
@@ -58,17 +58,19 @@ export class DownloadManger {
       }
 
       if (!worker.working) {
-        this.logger?.warning?.(`Worker ${worker.input} is not working.`);
+        this.requestConfig.logger.warning(
+          `Worker ${worker.input} is not working.`
+        );
         throw new Error("Worker is not working");
       }
 
       const { range, rangeIndex, signal } = this.rangeProvider.getRange();
       try {
-        this.logger?.debug?.(
+        this.requestConfig.logger.debug(
           `Worker ${worker.input} is fetching range ${rangeIndex}.`
         );
         const blob = await worker.download(range, signal);
-        this.logger?.debug?.(
+        this.requestConfig.logger.debug(
           `Worker ${worker.input} fetched range ${rangeIndex} successfully.`
         );
 
@@ -79,7 +81,7 @@ export class DownloadManger {
       } catch (e) {
         if ((e as DOMException)?.name !== "AbortError") {
           // worker failed other than AbortError
-          this.logger?.error?.(
+          this.requestConfig.logger.error(
             `Worker ${worker.input} failed to fetch range ${rangeIndex}: ${e}.`
           );
         }
@@ -87,9 +89,5 @@ export class DownloadManger {
         this.rangeProvider.removeDownloader(rangeIndex);
       }
     }
-  }
-
-  private get logger() {
-    return this.requestConfig.fastFetchConfig?.logger;
   }
 }

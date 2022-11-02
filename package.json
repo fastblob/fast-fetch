@@ -1,5 +1,5 @@
 {
-  "name": "parallel-fetch",
+  "name": "fast-fetch",
   "version": "1.0.0",
   "description": "JavaScript fetch in parallel and segmented way",
   "main": "lib/index.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fastblob/parallel-fetch.git"
+    "url": "git+https://github.com/fastblob/fast-fetch.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fastblob/parallel-fetch/issues"
+    "url": "https://github.com/fastblob/fast-fetch/issues"
   },
-  "homepage": "https://github.com/fastblob/parallel-fetch#readme",
+  "homepage": "https://github.com/fastblob/fast-fetch#readme",
   "devDependencies": {
     "typescript": "^4.8.4"
   }

@@ -12,6 +12,13 @@ export async function getMetadata (
   const controller = new AbortController()
   const signal = controller.signal
 
+  const fetchSignal = requestConfig?.init?.signal
+  if (fetchSignal != null) {
+    fetchSignal.addEventListener('abort', () => {
+      controller.abort()
+    })
+  }
+
   const promises = requestConfig.inputs.map(async (input) =>
     await fetch(input, {
       ...requestConfig.init,

@@ -64,12 +64,25 @@ export class DownloadManger {
         throw new Error('Worker is not working')
       }
 
-      const { range, rangeIndex, signal } = this.rangeProvider.getRange()
+      const { range, rangeIndex, signal: rangeSignal } = this.rangeProvider.getRange()
       try {
+        const workController = new AbortController()
+        const workSignal = workController.signal
+        rangeSignal.addEventListener('abort', () => {
+          workController.abort()
+        })
+
+        const fetchSignal = this.requestConfig?.init?.signal
+        if (fetchSignal != null) {
+          fetchSignal.addEventListener('abort', () => {
+            workController.abort()
+          })
+        }
+
         this.requestConfig.logger.debug(
           `Worker ${workerIndex} is fetching range ${rangeIndex}.`
         )
-        const blob = await worker.download(range, signal)
+        const blob = await worker.download(range, workSignal)
         this.requestConfig.chunkCallback(blob, range, worker.input)
 
         this.requestConfig.logger.debug(

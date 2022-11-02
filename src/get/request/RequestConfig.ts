@@ -1,4 +1,4 @@
-import type { FetchInput, GETInit, FastFetchGetConfig } from './types'
+import type { FetchInput, GETInit, FastFetchGetConfig, ChunkCallback } from './types'
 import type { Logger } from '../logger'
 import { defaultConfig } from './defaultConfig'
 
@@ -36,5 +36,9 @@ export class GETRequestConfig {
 
   get retryDelay (): number {
     return this.fastFetchConfig?.retryDelay ?? defaultConfig.retryDelay
+  }
+
+  get chunkCallback (): ChunkCallback {
+    return this.fastFetchConfig?.chunkCallback ?? (() => undefined)
   }
 }

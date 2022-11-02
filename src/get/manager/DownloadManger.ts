@@ -70,6 +70,8 @@ export class DownloadManger {
           `Worker ${workerIndex} is fetching range ${rangeIndex}.`
         )
         const blob = await worker.download(range, signal)
+        this.requestConfig.chunkCallback(blob, range, worker.input)
+
         this.requestConfig.logger.debug(
           `Worker ${workerIndex} fetched range ${rangeIndex} successfully.`
         )

@@ -12,11 +12,11 @@ export class DownloadWorker {
   constructor(input: FetchInput, init: GETInit) {
     this.input = input;
     this.init = init;
-    if (init?.parallelFetch?.maxRetries) {
-      this.maxRetries = init.parallelFetch.maxRetries;
+    if (init?.fastFetch?.maxRetries) {
+      this.maxRetries = init.fastFetch.maxRetries;
     }
-    if (init?.parallelFetch?.retryDelay) {
-      this.retryDelay = init.parallelFetch.retryDelay;
+    if (init?.fastFetch?.retryDelay) {
+      this.retryDelay = init.fastFetch.retryDelay;
     }
   }
 

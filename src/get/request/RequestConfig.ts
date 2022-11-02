@@ -10,11 +10,11 @@ export class GETRequestConfig {
     }
 
     get inputs() {
-        return [this.input, ...(this.init?.parallelFetch?.mirrorURLs || [])];
+        return [this.input, ...(this.init?.fastFetch?.mirrorURLs || [])];
     }
 
     get parallelConfig() {
-        return this.init?.parallelFetch;
+        return this.init?.fastFetch;
     }
 
 }

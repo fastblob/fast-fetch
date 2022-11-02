@@ -16,7 +16,7 @@ export class DownloadManger {
     this.requestConfig = requestConfig;
     this.metadata = metadata;
     this.workers = requestConfig.inputs.map(
-      (input) => new DownloadWorker(input, requestConfig.init)
+      (input) => new DownloadWorker(input, requestConfig)
     );
     requestConfig.logger.info(`Workers Count: ${this.workers.length}`);
 

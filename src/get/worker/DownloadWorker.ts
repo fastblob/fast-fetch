@@ -1,23 +1,16 @@
 import type { Range } from "../range/types";
-import type { FetchInput, GETInit } from "../request";
+import type { FetchInput, GETRequestConfig, GETInit } from "../request";
 
 export class DownloadWorker {
   readonly input: FetchInput;
-  readonly init: GETInit;
-  readonly maxRetries: number = 5;
-  readonly retryDelay: number = 3000;
+  readonly requestConfig: GETRequestConfig;
+
   private errorPromise = Promise.resolve();
   private currentRetry = 0;
 
-  constructor(input: FetchInput, init: GETInit) {
+  constructor(input: FetchInput, requestConfig: GETRequestConfig) {
     this.input = input;
-    this.init = init;
-    if (init?.fastFetch?.maxRetries) {
-      this.maxRetries = init.fastFetch.maxRetries;
-    }
-    if (init?.fastFetch?.retryDelay) {
-      this.retryDelay = init.fastFetch.retryDelay;
-    }
+    this.requestConfig = requestConfig;
   }
 
   async download(range: Range, signal: AbortSignal): Promise<Blob> {
@@ -64,5 +57,17 @@ export class DownloadWorker {
 
   get working(): boolean {
     return this.currentRetry < this.maxRetries;
+  }
+
+  get init(): GETInit {
+    return this.requestConfig.init;
+  }
+
+  get maxRetries(): number {
+    return this.requestConfig.maxRetries;
+  }
+
+  get retryDelay(): number {
+    return this.requestConfig.retryDelay;
   }
 }

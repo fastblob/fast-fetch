@@ -10,14 +10,14 @@ export async function GET(input: FetchInput, init?: GETInit) {
 
     if (metadata.status !== 200) {
       const message = `Status code is not 200: ${metadata.status}`
-      requestConfig.fastFetchConfig?.logger?.error?.(message)
+      requestConfig.logger.error(message)
       throw new Error(message);
     }
 
     const manager = new DownloadManger(requestConfig, metadata);
     return await manager.fetch();
   } catch {
-    requestConfig.fastFetchConfig?.logger?.error?.("Fallback to normal fetch")
+    requestConfig.logger.error("Fallback to normal fetch")
     // fallback to normal fetch
     return fetch(input, init);
   }

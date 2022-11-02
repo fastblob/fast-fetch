@@ -7,11 +7,11 @@ type FastFetchGetConfig = {
   mirrorURLs?: FetchInput[];
   maxRetries?: number;
   retryDelay?: number;
-  logger?: Logger;
+  logger?: Partial<Logger>;
 };
 
 type FastFetchInit = {
-  fastFetch?: FastFetchGetConfig
+  fastFetch?: FastFetchGetConfig;
 };
 
 export type GETInit = (FetchParams[1] & FastFetchInit) | undefined;

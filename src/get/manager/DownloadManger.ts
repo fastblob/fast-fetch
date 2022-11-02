@@ -18,11 +18,11 @@ export class DownloadManger {
     this.workers = requestConfig.inputs.map(
       (input) => new DownloadWorker(input, requestConfig.init)
     );
-    requestConfig.fastFetchConfig?.logger?.info?.(`Workers Count: ${this.workers.length}`);
+    requestConfig.logger.info(`Workers Count: ${this.workers.length}`);
 
     const contentLength = getContentLength(metadata.headers);
     this.rangeProvider = new RangeProvider(contentLength);
-    requestConfig.fastFetchConfig?.logger?.info?.(`Content length: ${contentLength}`);
+    requestConfig.logger.info(`Content length: ${contentLength}`);
 
     this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex);
   }

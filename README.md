@@ -39,6 +39,15 @@ interface FastFetchGetConfig {
 
 Only `GET` and `HEAD` requests are supported. Other methods will use the original `fetch` API.
 
+
+## Polyfills?
+| caniuse | polyfill |
+|---|---|
+| [AbortController](https://caniuse.com/abortcontroller) | [mo/abortcontroller-polyfill](https://github.com/mo/abortcontroller-polyfill) |
+| [Blob API: `stream`](https://caniuse.com/mdn-api_blob_stream) | [eligrey/Blob.js](https://github.com/eligrey/Blob.js) |
+| [Promise.any](https://caniuse.com/mdn-javascript_builtins_promise_any) | [zloirock/corejs](https://github.com/zloirock/core-js#promiseany) |
+| [TransformStream](https://caniuse.com/mdn-api_transformstream) | [MattiasBuelens/web-streams-polyfill](https://github.com/MattiasBuelens/web-streams-polyfill) |
+
 ## License
 
 MIT

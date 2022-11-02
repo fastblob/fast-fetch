@@ -19,14 +19,14 @@ export class DownloadStreamer {
 
   queueBlob (index: RangeIndex, blob: Blob): void {
     this.blobQueue.set(index, blob)
-    this.write()
+    void this.write()
   }
 
   abort (reason?: any): void {
-    this.stream.writable.getWriter().abort(reason)
+    void this.stream.writable.getWriter().abort(reason)
   }
 
-  private async write () {
+  private async write (): Promise<void> {
     if (this.writingLock) {
       return
     }
@@ -36,17 +36,22 @@ export class DownloadStreamer {
     if (blob != null) {
       this.blobQueue.delete(this.currentRangeIndexToDo)
       this.currentRangeIndexToDo++
-      await blob.stream().pipeTo(this.stream.writable, {
-        preventClose: true
-      })
+      try {
+        await blob.stream().pipeTo(this.stream.writable, {
+          preventClose: true
+        })
+      } catch (e) {
+        // if pipeTo failed, abort the stream
+        this.abort(e)
+      }
     }
     if (this.currentRangeIndexToDo > this.maxRangeIndex) {
-      this.stream.writable.getWriter().close()
+      void this.stream.writable.getWriter().close()
     }
     this.writingLock = false
 
     if (this.blobQueue.has(this.currentRangeIndexToDo)) {
-      this.write()
+      void this.write()
     }
   }
 }

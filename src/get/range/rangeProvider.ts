@@ -35,16 +35,14 @@ export class RangeProvider {
     }
   }
 
-  removeDownloader (rangeIndex: RangeIndex) {
-    if (this.downloaderCounter.has(rangeIndex)) {
-      this.downloaderCounter.set(
-        rangeIndex,
-        this.downloaderCounter.get(rangeIndex)! - 1
-      )
+  removeDownloader (rangeIndex: RangeIndex): void {
+    const count = this.downloaderCounter.get(rangeIndex)
+    if (count != null) {
+      this.downloaderCounter.set(rangeIndex, count - 1)
     }
   }
 
-  downloadComplete (rangeIndex: RangeIndex) {
+  downloadComplete (rangeIndex: RangeIndex): void {
     const controller = this.getController(rangeIndex)
     controller.abort()
 
@@ -62,18 +60,24 @@ export class RangeProvider {
     const rangeIndex = this.selectRangeStrategy(this.downloaderCounter)
     const range = this.ranges[rangeIndex]
     const signal = this.getController(rangeIndex).signal
-    this.downloaderCounter.set(
-      rangeIndex,
-      this.downloaderCounter.get(rangeIndex)! + 1
-    )
+
+    const count = this.downloaderCounter.get(rangeIndex)
+    if (count != null) {
+      this.downloaderCounter.set(rangeIndex, count + 1)
+    }
+
     return { range, rangeIndex, signal }
   }
 
   private getController (rangeIndex: RangeIndex): AbortController {
-    if (!this.controllers.has(rangeIndex)) {
-      this.controllers.set(rangeIndex, new AbortController())
+    const controllerInMap = this.controllers.get(rangeIndex)
+    if (controllerInMap != null) {
+      return controllerInMap
     }
-    return this.controllers.get(rangeIndex)!
+
+    const controller = new AbortController()
+    this.controllers.set(rangeIndex, controller)
+    return controller
   }
 
   private rangesDone (): void {

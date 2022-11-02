@@ -1,5 +1,5 @@
-import { parallelGet } from "./parallel-get";
-import type { ParallelGetConfig } from "./parallel-get";
+import { parallelGet } from "./get";
+import type { ParallelGetConfig } from "./get";
 
 type FetchParams = Parameters<typeof fetch>;
 

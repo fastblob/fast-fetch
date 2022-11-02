@@ -18,7 +18,7 @@
     "url": "git+https://github.com/fastblob/fast-fetch.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fastblob/fast-fetch/issues"
   },

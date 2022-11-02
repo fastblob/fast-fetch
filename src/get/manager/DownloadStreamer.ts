@@ -1,51 +1,52 @@
-import { type RangeIndex } from "../range";
+import { type RangeIndex } from '../range'
 
 export class DownloadStreamer {
-  private readonly maxRangeIndex: number;
-  private readonly blobQueue: Map<RangeIndex, Blob> = new Map();
-  private currentRangeIndexToDo = 0;
-  private stream: TransformStream<Uint8Array, Uint8Array> =
-    new TransformStream();
-  private writingLock = false;
+  private readonly maxRangeIndex: number
+  private readonly blobQueue: Map<RangeIndex, Blob> = new Map()
+  private currentRangeIndexToDo = 0
+  private readonly stream: TransformStream<Uint8Array, Uint8Array> =
+    new TransformStream()
 
-  constructor(maxRangeIndex: number) {
-    this.maxRangeIndex = maxRangeIndex;
+  private writingLock = false
+
+  constructor (maxRangeIndex: number) {
+    this.maxRangeIndex = maxRangeIndex
   }
 
-  get ReadableStream(): ReadableStream<Uint8Array> {
-    return this.stream.readable;
+  get ReadableStream (): ReadableStream<Uint8Array> {
+    return this.stream.readable
   }
 
-  queueBlob(index: RangeIndex, blob: Blob): void {
-    this.blobQueue.set(index, blob);
-    this.write();
+  queueBlob (index: RangeIndex, blob: Blob): void {
+    this.blobQueue.set(index, blob)
+    this.write()
   }
 
-  abort(reason?: any): void {
-    this.stream.writable.getWriter().abort(reason);
+  abort (reason?: any): void {
+    this.stream.writable.getWriter().abort(reason)
   }
 
-  private async write() {
+  private async write () {
     if (this.writingLock) {
-      return;
+      return
     }
 
-    this.writingLock = true;
-    const blob = this.blobQueue.get(this.currentRangeIndexToDo);
-    if (blob) {
-      this.blobQueue.delete(this.currentRangeIndexToDo);
-      this.currentRangeIndexToDo++;
+    this.writingLock = true
+    const blob = this.blobQueue.get(this.currentRangeIndexToDo)
+    if (blob != null) {
+      this.blobQueue.delete(this.currentRangeIndexToDo)
+      this.currentRangeIndexToDo++
       await blob.stream().pipeTo(this.stream.writable, {
-        preventClose: true,
-      });
+        preventClose: true
+      })
     }
     if (this.currentRangeIndexToDo > this.maxRangeIndex) {
-      this.stream.writable.getWriter().close();
+      this.stream.writable.getWriter().close()
     }
-    this.writingLock = false;
+    this.writingLock = false
 
     if (this.blobQueue.has(this.currentRangeIndexToDo)) {
-      this.write();
+      this.write()
     }
   }
 }

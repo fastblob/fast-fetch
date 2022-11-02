@@ -1,3 +1,3 @@
-export { getMetadata } from "./getMetadata";
-export type { Metadata } from "./getMetadata";
-export { getContentLength } from "./getContentLength";
+export { getMetadata } from './getMetadata'
+export type { Metadata } from './getMetadata'
+export { getContentLength } from './getContentLength'

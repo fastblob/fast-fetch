@@ -1,2 +1,2 @@
-export { HEAD } from "./head";
-export type { HEADInit, FastFetchHEADConfig } from "./request";
+export { HEAD } from './head'
+export type { HEADInit, FastFetchHEADConfig } from './request'

@@ -1,1 +1,1 @@
-export { DownloadWorker } from "./DownloadWorker";
+export { DownloadWorker } from './DownloadWorker'

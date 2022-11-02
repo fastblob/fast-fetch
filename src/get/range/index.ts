@@ -1,2 +1,2 @@
-export { RangeProvider } from "./rangeProvider";
-export type { Range, StartRange, EndRange, RangeIndex } from "./types";
+export { RangeProvider } from './rangeProvider'
+export type { Range, StartRange, EndRange, RangeIndex } from './types'

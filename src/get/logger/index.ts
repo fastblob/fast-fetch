@@ -1,1 +1,1 @@
-export type { Logger } from "./types";
+export type { Logger } from './types'

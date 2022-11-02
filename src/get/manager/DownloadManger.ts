@@ -36,8 +36,8 @@ export class DownloadManger {
   async startFetching (): Promise<void> {
     this.requestConfig.logger.info('Start fetching.')
 
-    const promises = this.workers.map(async (worker) =>
-      await this.assignWorkToWorker(worker)
+    const promises = this.workers.map(async (worker, idx) =>
+      await this.assignWorkToWorker(worker, idx)
     )
     try {
       await Promise.any(promises)
@@ -49,7 +49,7 @@ export class DownloadManger {
     }
   }
 
-  async assignWorkToWorker (worker: DownloadWorker): Promise<void> {
+  async assignWorkToWorker (worker: DownloadWorker, workerIndex: number): Promise<void> {
     const doneSignal = this.rangeProvider.doneSignal
 
     while (true) {
@@ -59,7 +59,7 @@ export class DownloadManger {
 
       if (!worker.working) {
         this.requestConfig.logger.warning(
-          `Worker ${worker.input} is not working.`
+          `Worker ${workerIndex} is not working.`
         )
         throw new Error('Worker is not working')
       }
@@ -67,11 +67,11 @@ export class DownloadManger {
       const { range, rangeIndex, signal } = this.rangeProvider.getRange()
       try {
         this.requestConfig.logger.debug(
-          `Worker ${worker.input} is fetching range ${rangeIndex}.`
+          `Worker ${workerIndex} is fetching range ${rangeIndex}.`
         )
         const blob = await worker.download(range, signal)
         this.requestConfig.logger.debug(
-          `Worker ${worker.input} fetched range ${rangeIndex} successfully.`
+          `Worker ${workerIndex} fetched range ${rangeIndex} successfully.`
         )
 
         // notify range provider that this range is done
@@ -82,7 +82,7 @@ export class DownloadManger {
         if ((e as DOMException)?.name !== 'AbortError') {
           // worker failed other than AbortError
           this.requestConfig.logger.error(
-            `Worker ${worker.input} failed to fetch range ${rangeIndex}: ${e}.`
+            `Worker ${workerIndex} failed to fetch range ${rangeIndex}: ${(e as DOMException).message}.`
           )
         }
 

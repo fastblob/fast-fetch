@@ -33,7 +33,7 @@ export class DownloadWorker {
     if (!response.ok) {
       controller.abort()
       this.error()
-      throw new Error(`Failed to download ${this.input} at range  ${range[0]}-${range[1]}`)
+      throw new Error(`Failed to download at range  ${range[0]}-${range[1]}`)
     }
 
     const blob = await response.blob()
@@ -41,7 +41,7 @@ export class DownloadWorker {
     if (blob.size !== end - start + 1) {
       this.error()
       throw new Error(
-        `Failed to download ${this.input} at range ${range[0]}-${range[1]}, size mismatch`
+        `Failed to download at range ${range[0]}-${range[1]}, size mismatch`
       )
     }
 

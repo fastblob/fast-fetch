@@ -3,7 +3,7 @@ import { getMetadata } from "./metadata";
 import { DownloadManger } from "./manager";
 import { GETRequestConfig } from "./request";
 
-export async function parallelGet(input: FetchInput, init?: GETInit) {
+export async function GET(input: FetchInput, init?: GETInit) {
   const requestConfig = new GETRequestConfig(input, init);
   try {
     const metadata = await getMetadata(requestConfig);

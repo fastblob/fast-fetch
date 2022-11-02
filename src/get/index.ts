@@ -1,2 +1,2 @@
-export { parallelGet } from "./parallel-get";
+export { GET } from "./get";
 export type { GETInit } from "./request";

@@ -1,2 +1,2 @@
-export { parallelFetch as default } from './parallel-fetch';
-export type { ParallelGetConfig } from './parallel-get';
+export { fastFetch as default } from "./fast-fetch";
+export type { ParallelGetConfig } from "./parallel-get";

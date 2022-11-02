@@ -3,7 +3,7 @@ import type { ParallelGetConfig } from "./parallel-get";
 
 type FetchParams = Parameters<typeof fetch>;
 
-export function parallelFetch(
+export function fastFetch(
   input: FetchParams[0],
   init?: ParallelGetConfig
 ): ReturnType<typeof fetch> {

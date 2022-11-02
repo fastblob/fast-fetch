@@ -1,2 +1,2 @@
 export { fastFetch as default } from "./fast-fetch";
-export type { GETInit } from "./get";
+export { GET, type GETInit, type FastFetchGetConfig } from "./get";

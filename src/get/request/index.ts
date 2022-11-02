@@ -1,2 +1,2 @@
 export { GETRequestConfig } from "./RequestConfig";
-export type { GETInit, FetchInput } from "./types";
+export type { GETInit, FetchInput, FastFetchGetConfig } from "./types";

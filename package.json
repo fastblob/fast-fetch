@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "prepublish": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -49,10 +49,8 @@ export class DownloadManger {
   }
 
   async assignWorkToWorker (worker: DownloadWorker, workerIndex: number): Promise<void> {
-    const doneSignal = this.rangeProvider.doneSignal
-
     while (true) {
-      if (doneSignal.aborted) {
+      if (this.rangeProvider.done) {
         return
       }
 

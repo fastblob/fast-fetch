@@ -10,8 +10,6 @@ export class RangeProvider {
   private readonly segmentStrategy = defaultSegmentStrategy
   private readonly selectRangeStrategy = defaultSelectRangeStrategy
 
-  private readonly doneController = new AbortController()
-
   constructor (
     contentLength: number,
     segmentStrategy?: (contentLength: number) => Range[],
@@ -47,9 +45,6 @@ export class RangeProvider {
     controller.abort()
 
     this.downloaderCounter.delete(rangeIndex)
-    if (this.downloaderCounter.size === 0) {
-      this.rangesDone()
-    }
   }
 
   getRange (): {
@@ -80,15 +75,11 @@ export class RangeProvider {
     return controller
   }
 
-  private rangesDone (): void {
-    this.doneController.abort()
-  }
-
-  get doneSignal (): AbortSignal {
-    return this.doneController.signal
-  }
-
   get maxRangeIndex (): RangeIndex {
     return this.ranges.length - 1
+  }
+
+  get done (): boolean {
+    return this.downloaderCounter.size === 0
   }
 }

@@ -32,6 +32,7 @@ interface FastFetchGetConfig {
   maxRetries?: number // max retry for each mirror
   retryDelay?: number // delay between retries
   logger?: Partial<Logger> // logger
+  chunkCallback?: (chunk: Blob, range: [number, number], input: FetchInput) => void
 }
 ```
 

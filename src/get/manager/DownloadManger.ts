@@ -101,8 +101,11 @@ export class DownloadManger {
             throw new Error(`Worker ${workerIndex} failed to fetch range after retries ${currentRetry}`)
           }
 
+          this.rangeProvider.removeDownloader(rangeIndex)
+
           // sleep for retryDelay
           await new Promise((resolve) => setTimeout(resolve, this.requestConfig.retryDelay))
+          continue
         }
 
         this.rangeProvider.removeDownloader(rangeIndex)

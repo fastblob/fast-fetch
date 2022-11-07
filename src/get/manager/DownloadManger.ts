@@ -21,11 +21,11 @@ export class DownloadManger {
     this.workers = workerInputs.map(
       (input) => new DownloadWorker(input, requestConfig)
     )
-    requestConfig.logger.info(`Workers Count: ${this.workers.length}`)
+    requestConfig.config.logger.info(`Workers Count: ${this.workers.length}`)
 
     const contentLength = getContentLength(metadata.headers)
-    this.rangeProvider = new RangeProvider(contentLength, this.requestConfig.segmentStrategy, this.requestConfig.selectRangeStrategy)
-    requestConfig.logger.info(`Content length: ${contentLength}`)
+    this.rangeProvider = new RangeProvider(contentLength, this.requestConfig.config.segmentStrategy, this.requestConfig.config.selectRangeStrategy)
+    requestConfig.config.logger.info(`Content length: ${contentLength}`)
 
     this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex, requestConfig?.init?.signal)
 
@@ -35,16 +35,16 @@ export class DownloadManger {
 
   // start fetching
   private async startFetching (): Promise<void> {
-    this.requestConfig.logger.info('Start fetching.')
+    this.requestConfig.config.logger.info('Start fetching.')
 
     const promises = this.workers.map(async (worker, idx) =>
       await this.assignWorkToWorker(worker, idx)
     )
     try {
       await Promise.any(promises)
-      this.requestConfig.logger.info('Fetching done.')
+      this.requestConfig.config.logger.info('Fetching done.')
     } catch {
-      this.requestConfig.logger.error('All workers failed, stream aborted.')
+      this.requestConfig.config.logger.error('All workers failed, stream aborted.')
       // all workers failed
       this.streamer.abort('All workers failed')
     }
@@ -73,13 +73,13 @@ export class DownloadManger {
           })
         }
 
-        this.requestConfig.logger.debug(
+        this.requestConfig.config.logger.debug(
           `Worker ${workerIndex} is fetching range ${rangeIndex}.`
         )
         const blob = await worker.download(range, workSignal)
-        this.requestConfig.chunkCallback(blob, range, worker.input)
+        this.requestConfig.config.chunkCallback(blob, range, worker.input)
 
-        this.requestConfig.logger.debug(
+        this.requestConfig.config.logger.debug(
           `Worker ${workerIndex} fetched range ${rangeIndex} successfully.`
         )
 
@@ -90,12 +90,12 @@ export class DownloadManger {
       } catch (e) {
         if ((e as DOMException)?.name !== 'AbortError') {
           // worker failed other than AbortError
-          this.requestConfig.logger.error(
+          this.requestConfig.config.logger.error(
             `Worker ${workerIndex} failed to fetch range ${rangeIndex}: ${(e as DOMException).message}.`
           )
           currentRetry += 1
-          if (currentRetry > this.requestConfig.maxRetries) {
-            this.requestConfig.logger.error(
+          if (currentRetry > this.requestConfig.config.maxRetries) {
+            this.requestConfig.config.logger.error(
               `Worker ${workerIndex} failed to fetch range ${rangeIndex} after ${currentRetry} retries.`
             )
             throw new Error(`Worker ${workerIndex} failed to fetch range after retries ${currentRetry}`)
@@ -104,7 +104,7 @@ export class DownloadManger {
           this.rangeProvider.removeDownloader(rangeIndex)
 
           // sleep for retryDelay
-          await new Promise((resolve) => setTimeout(resolve, this.requestConfig.retryDelay))
+          await new Promise((resolve) => setTimeout(resolve, this.requestConfig.config.retryDelay))
           continue
         }
 

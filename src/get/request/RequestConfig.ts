@@ -1,52 +1,18 @@
-import type { FetchInput, GETInit, FastFetchGetConfig, ChunkCallback } from './types'
-import type { Logger } from '../logger'
-import { defaultConfig } from './defaultConfig'
+import type { FetchInput, GETInit } from './types'
+import { Config } from '../config'
 
 export class GETRequestConfig {
   readonly input: FetchInput
   readonly init: GETInit
+  readonly config: Config
 
   constructor (input: FetchInput, init: GETInit) {
     this.input = input
     this.init = init
+    this.config = new Config(init?.fastFetch ?? {})
   }
 
   get inputs (): FetchInput[] {
-    return [this.input, ...(this.init?.fastFetch?.mirrorURLs ?? [])]
-  }
-
-  private get fastFetchConfig (): FastFetchGetConfig | undefined {
-    return this.init?.fastFetch
-  }
-
-  get logger (): Logger {
-    const placeholder = (): void => {}
-
-    return {
-      info: this.fastFetchConfig?.logger?.info ?? placeholder,
-      error: this.fastFetchConfig?.logger?.error ?? placeholder,
-      debug: this.fastFetchConfig?.logger?.debug ?? placeholder,
-      warning: this.fastFetchConfig?.logger?.warning ?? placeholder
-    }
-  }
-
-  get maxRetries (): number {
-    return this.fastFetchConfig?.maxRetries ?? defaultConfig.maxRetries
-  }
-
-  get retryDelay (): number {
-    return this.fastFetchConfig?.retryDelay ?? defaultConfig.retryDelay
-  }
-
-  get chunkCallback (): ChunkCallback {
-    return this.fastFetchConfig?.chunkCallback ?? defaultConfig.chunkCallback
-  }
-
-  get segmentStrategy (): ((contentLength: number) => Array<[number, number]>) {
-    return this.fastFetchConfig?.segmentStrategy ?? defaultConfig.segmentStrategy
-  }
-
-  get selectRangeStrategy (): ((downloaderCounter: Map<number, number>) => number) {
-    return this.fastFetchConfig?.selectRangeStrategy ?? defaultConfig.selectRangeStrategy
+    return [this.input, ...(this.config.mirrorURLs)]
   }
 }

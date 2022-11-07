@@ -1,2 +1,3 @@
 export { GET } from './get'
-export type { GETInit, FastFetchGetConfig } from './request'
+export type { GETInit } from './request'
+export type { FastFetchGetConfig } from './config'

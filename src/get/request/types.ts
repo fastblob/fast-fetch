@@ -11,6 +11,7 @@ export interface FastFetchGetConfig {
   logger?: Partial<Logger>
   chunkCallback?: ChunkCallback
   segmentStrategy?: (contentLength: number) => Array<[number, number]>
+  selectRangeStrategy?: (downloaderCounter: Map<number, number>) => number
 }
 
 interface FastFetchGETInit {

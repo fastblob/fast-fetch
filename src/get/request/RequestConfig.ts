@@ -39,10 +39,14 @@ export class GETRequestConfig {
   }
 
   get chunkCallback (): ChunkCallback {
-    return this.fastFetchConfig?.chunkCallback ?? (() => undefined)
+    return this.fastFetchConfig?.chunkCallback ?? defaultConfig.chunkCallback
   }
 
-  get segmentStrategy (): ((contentLength: number) => Array<[number, number]>) | undefined {
-    return this.fastFetchConfig?.segmentStrategy
+  get segmentStrategy (): ((contentLength: number) => Array<[number, number]>) {
+    return this.fastFetchConfig?.segmentStrategy ?? defaultConfig.segmentStrategy
+  }
+
+  get selectRangeStrategy (): ((downloaderCounter: Map<number, number>) => number) {
+    return this.fastFetchConfig?.selectRangeStrategy ?? defaultConfig.selectRangeStrategy
   }
 }

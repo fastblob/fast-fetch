@@ -24,7 +24,7 @@ export class DownloadManger {
     requestConfig.logger.info(`Workers Count: ${this.workers.length}`)
 
     const contentLength = getContentLength(metadata.headers)
-    this.rangeProvider = new RangeProvider(contentLength, this.requestConfig.segmentStrategy)
+    this.rangeProvider = new RangeProvider(contentLength, this.requestConfig.segmentStrategy, this.requestConfig.selectRangeStrategy)
     requestConfig.logger.info(`Content length: ${contentLength}`)
 
     this.streamer = new DownloadStreamer(this.rangeProvider.maxRangeIndex, requestConfig?.init?.signal)

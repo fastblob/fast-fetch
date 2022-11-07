@@ -10,6 +10,7 @@ export interface FastFetchGetConfig {
   retryDelay?: number
   logger?: Partial<Logger>
   chunkCallback?: ChunkCallback
+  segmentStrategy?: (contentLength: number) => Array<[number, number]>
 }
 
 interface FastFetchGETInit {

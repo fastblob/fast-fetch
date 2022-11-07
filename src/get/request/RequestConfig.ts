@@ -41,4 +41,8 @@ export class GETRequestConfig {
   get chunkCallback (): ChunkCallback {
     return this.fastFetchConfig?.chunkCallback ?? (() => undefined)
   }
+
+  get segmentStrategy (): ((contentLength: number) => Array<[number, number]>) | undefined {
+    return this.fastFetchConfig?.segmentStrategy
+  }
 }

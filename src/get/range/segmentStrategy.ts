@@ -6,14 +6,12 @@ const MB = 1024 * 1024
 function defaultSegmentSize (contentLength: number): number {
   if (contentLength <= 512 * KB) {
     return contentLength
-  } else if (contentLength <= 4 * MB) {
-    return 128 * KB
-  } else if (contentLength <= 16 * MB) {
-    return 256 * KB
+  } else if (contentLength <= 8 * MB) {
+    return Math.ceil(Math.max(512 * KB, (contentLength / 8)))
   } else if (contentLength <= 32 * MB) {
-    return 512 * KB
+    return Math.ceil((contentLength / 16))
   } else {
-    return 1 * MB
+    return 2 * MB
   }
 }
 

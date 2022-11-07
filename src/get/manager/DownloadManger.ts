@@ -51,16 +51,11 @@ export class DownloadManger {
   }
 
   async assignWorkToWorker (worker: DownloadWorker, workerIndex: number): Promise<void> {
+    let currentRetry = 0
+
     while (true) {
       if (this.rangeProvider.done) {
         return
-      }
-
-      if (!worker.working) {
-        this.requestConfig.logger.warning(
-          `Worker ${workerIndex} is not working.`
-        )
-        throw new Error('Worker is not working')
       }
 
       const { range, rangeIndex, signal: rangeSignal } = this.rangeProvider.getRange()
@@ -98,6 +93,16 @@ export class DownloadManger {
           this.requestConfig.logger.error(
             `Worker ${workerIndex} failed to fetch range ${rangeIndex}: ${(e as DOMException).message}.`
           )
+          currentRetry += 1
+          if (currentRetry > this.requestConfig.maxRetries) {
+            this.requestConfig.logger.error(
+              `Worker ${workerIndex} failed to fetch range ${rangeIndex} after ${currentRetry} retries.`
+            )
+            throw new Error(`Worker ${workerIndex} failed to fetch range after retries ${currentRetry}`)
+          }
+
+          // sleep for retryDelay
+          await new Promise((resolve) => setTimeout(resolve, this.requestConfig.retryDelay))
         }
 
         this.rangeProvider.removeDownloader(rangeIndex)

@@ -1,4 +1,4 @@
-import type { RangeIndex } from './types'
+type RangeIndex = number
 
 const threshold = 10
 

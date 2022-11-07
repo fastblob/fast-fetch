@@ -1,5 +1,5 @@
-import { defaultSelectRangeStrategy } from '../range/selectRangeStrategy'
-import { defaultSegmentStrategy } from '../range/segmentStrategy'
+import { defaultSelectRangeStrategy } from './selectRangeStrategy'
+import { defaultSegmentStrategy } from './segmentStrategy'
 
 const placeholder = (): void => {}
 

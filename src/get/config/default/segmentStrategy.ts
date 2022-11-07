@@ -1,4 +1,4 @@
-import type { Range } from './types'
+type Range = [number, number]
 
 const KB = 1024
 const MB = 1024 * 1024
